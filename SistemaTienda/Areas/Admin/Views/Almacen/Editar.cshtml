@@ -1,0 +1,56 @@
+﻿@model Almacen
+
+@{
+    ViewData["Title"] = "Actualizar Almacen";
+}
+
+<div class="container-xl">
+    <div class="row justify-content-center my-5">
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-header bg-success bg-gradient py-4 text-center text-white">
+                    <h2>Actualizar Almacen</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <input asp-for="Id" hidden />
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Nombre" type="text" class="form-control" placeholder="Nombre almacen">
+                            <label asp-for="Nombre"></label>
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Descripcion" type="text" class="form-control" placeholder="Descripcion almacen">
+                            <label asp-for="Descripcion"></label>
+                            <span asp-validation-for="Descripcion" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select asp-for="Estado" class="form-select">
+                                <option disabled selected>Seleccione</option>
+                                <option value="true">Activo</option>
+                                <option value="false">Inactivo</option>
+                            </select>
+                            <label asp-for="Estado"></label>
+                            <span asp-validation-for="Estado" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-success w-100"> <i class="bi bi-floppy"></i> Guardar Cambios</button>
+                            </div>
+                            <div class="col-6">
+                                <a asp-action="Index" class="btn btn-secondary w-100"> <i class="bi bi-x-circle"></i> Cancelar</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"></partial>
+}
+
