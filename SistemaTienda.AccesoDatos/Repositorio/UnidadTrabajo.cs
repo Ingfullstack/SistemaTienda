@@ -13,11 +13,15 @@ namespace SistemaTienda.AccesoDatos.Repositorio
         private readonly ApplicationDbContext dbContext;
 
         public IAlmacenRepositorio Almacen {  get; private set; }
+        public ICategoriaRepositorio Categoria {  get; private set; }
+        public IMarcaRepositorio Marca {  get; private set; }
 
         public UnidadTrabajo(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
             Almacen = new AlmacenRepositorio(dbContext);
+            Categoria = new CategoriaRepositorio(dbContext);
+            Marca = new MarcaRepositorio(dbContext);
         }
 
         public void Dispose()

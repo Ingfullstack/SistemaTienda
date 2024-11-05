@@ -19,5 +19,7 @@ namespace SistemaTienda.AccesoDatos.Data
         }
 
         public DbSet<Almacen> Almacen { get; set; }
+        public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Marca> Marcas { get; set; }
     }
 }
