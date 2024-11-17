@@ -7,27 +7,33 @@ $(document).ready(() => {
 const CargarTabla = () => {
     datatable = $("#tblDatos").DataTable({
         "ajax": {
-            "url": "/Admin/Almacen/ObtenerTodos"
+            "url": "/Admin/Productos/ObtenerTodos"
         },
         "columns": [
-            { data: "nombre"},
+            { data: "codigo"},
             { data: "descripcion"},
+            { data: "categoria.nombre"},
+            { data: "marca.nombre"},
             {
-                data: "estado",
+                data: "urlImagen",
                 "render": function (data) {
-                    if (data) {
-                        return `<span class="badge bg-success">Activo</span>`;
-                    } else {
-                        return `<span class="badge bg-danger">Inactivo</span>`;
-                    }
+                    return `<img src="../${data}" class="imagen"/>`;
+                }
+            },
+            {
+                data: "precio", className: "text-end",
+                "render": function (dinero) {
+                    var f = "$";
+                    var d = f + dinero.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+                    return d;
                 }
             },
             {
                 data: "id",
                 "render": function (data) {
                     return `<div class="text-center">
-                                <a href="/Admin/Almacen/Editar/${data}" class="btn btn-success btn-sm bg-gradient"> <i class="bi bi-pencil-square"></i> </a>
-                                <a onclick=Eliminar("/Admin/Almacen/Eliminar/${data}") class="btn btn-danger btn-sm bg-gradient"> <i class="bi bi-trash"></i> </a>
+                                <a href="/Admin/Productos/Editar/${data}" class="btn btn-success btn-sm bg-gradient"> <i class="bi bi-pencil-square"></i> </a>
+                                <a onclick=Eliminar("/Admin/Productos/Eliminar/${data}") class="btn btn-danger btn-sm bg-gradient"> <i class="bi bi-trash"></i> </a>
                             </div>`;
                 }
             },

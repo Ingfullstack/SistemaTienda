@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SistemaTienda.AccesoDatos.Data;
 using SistemaTienda.AccesoDatos.Repositorio.IRepositorio;
 using SistemaTienda.Modelo.Models;
@@ -39,6 +40,29 @@ namespace SistemaTienda.AccesoDatos.Repositorio
         public async Task<bool> ExisteCodigo(int codigo)
         {
             return await dbContext.Productos.AnyAsync(x => x.Codigo == codigo);
+        }
+
+        public IEnumerable<SelectListItem> ListaCategoriaMarca(string obj)
+        {
+            if (obj == "Categoria")
+            {
+                return dbContext.Categorias.Where(x => x.Estado == true).Select(x => new SelectListItem
+                {
+                    Text = x.Nombre,
+                    Value = x.Id.ToString()
+                });
+            }
+
+            if (obj == "Marca")
+            {
+                return dbContext.Marcas.Where(x => x.Estado == true).Select(x => new SelectListItem
+                {
+                    Text = x.Nombre,
+                    Value = x.Id.ToString()
+                });
+            }
+
+            return null;
         }
     }
 }
