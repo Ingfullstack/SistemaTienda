@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaTienda.AccesoDatos.Data;
 using SistemaTienda.AccesoDatos.Repositorio.IRepositorio;
+using SistemaTienda.Modelo.Especificaciones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,6 +84,28 @@ namespace SistemaTienda.AccesoDatos.Repositorio
             }
 
             return await query.ToListAsync();
+        }
+
+        public PagedList<T> ObtenerTodosPaginado(Parametros parametros, Expression<Func<T, bool>> filtro = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool isTracking = true)
+        {
+            IQueryable<T> query = dbSet;
+
+            if (filtro != null)
+            {
+                query = query.Where(filtro);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            if (!isTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return PagedList<T>.ToPagedList(query, parametros.PageNumber, parametros.PageSize);
         }
 
         public void Remover(T entidad)

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SistemaTienda.AccesoDatos.Repositorio.IRepositorio;
+using SistemaTienda.Modelo.Especificaciones;
 using SistemaTienda.Modelo.Models;
 using System.Diagnostics;
 
@@ -16,10 +17,46 @@ namespace SistemaTienda.Areas.Inventario.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int pageNumber = 1, string busqueda = "", string busquedaActual = "")
         {
-            IEnumerable<Producto> productoLista = await unidadTrabajo.Producto.ObtenerTodos();
-            return View(productoLista);
+
+            if (!string.IsNullOrEmpty(busqueda))
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                busqueda = busquedaActual;
+            }
+
+            ViewData["BusquedaActual"] = busqueda;
+
+            if (pageNumber < 1) { pageNumber = 1; }
+
+            Parametros parametros = new Parametros()
+            {
+                PageNumber = pageNumber,
+                PageSize = 4
+            };
+
+            var resultado = unidadTrabajo.Producto.ObtenerTodosPaginado(parametros);
+
+            if (!string.IsNullOrEmpty(busqueda))
+            {
+                resultado = unidadTrabajo.Producto.ObtenerTodosPaginado(parametros, x => x.Descripcion.Contains(busqueda) || x.Codigo.ToString().Contains(busqueda));
+            }
+
+            ViewData["TotalPaginas"] = resultado.MetaData.TotalPages;
+            ViewData["TotalRegistros"] = resultado.MetaData.TotalCount;
+            ViewData["PageSize"] = resultado.MetaData.PageSize;
+            ViewData["PageNumber"] = pageNumber;
+            ViewData["Previo"] = "disabled";
+            ViewData["Siguiente"] = "";
+
+            if (pageNumber > 1) { ViewData["Previo"] = ""; }
+            if(resultado.MetaData.TotalPages <= pageNumber) { ViewData["Siguiente"] = "disabled"; }
+
+            return View(resultado);
         }
 
         [HttpGet]
